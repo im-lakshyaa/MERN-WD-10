@@ -58,13 +58,13 @@ let role = "user";
 let username = "lakshya";
 let password = "12345678";
 
-// ✅ GET route for login page
+
 app.get("/login", (req, res) => {
   res.render("login", { error: null });
 });
 
 
-// ✅ Middleware 1: validation
+
 app.post("/login", (req, res, next) => {
   const { role: userRole, username: userName, password: userPass } = req.body;
 
@@ -75,7 +75,7 @@ app.post("/login", (req, res, next) => {
   next();
 });
 
-// ✅ Middleware 2: authentication
+
 app.post("/login", (req, res, next) => {
   const { role: userRole, username: userName, password: userPass } = req.body;
 
@@ -86,7 +86,7 @@ app.post("/login", (req, res, next) => {
   }
 });
 
-// ✅ Final route: redirect based on role
+
 app.post("/login", (req, res) => {
   const { role } = req.body;
 
