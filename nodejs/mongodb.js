@@ -9,7 +9,7 @@ app.get("/",(req,res)=>{
     res.send("hello world")
 })
 
-mongoose.connect("mongodb+srv://lakshya20042004:2004l2004@e-com.ey0loag.mongodb.net/")
+mongoose.connect("mongodb+srv://lakshya20042004:@e-com.ey0loag.mongodb.net/")
 .then(()=>{
     console.log("mongodb connectd");
     
@@ -19,5 +19,5 @@ mongoose.connect("mongodb+srv://lakshya20042004:2004l2004@e-com.ey0loag.mongodb.
 })
 
 app.listen(PORT,()=>{
-    
+
 })
