@@ -1,4 +1,6 @@
 import { createContext, useState, useContext } from "react";
+import React from "react";
+
 
 const AuthContext = createContext();
 

@@ -3,12 +3,23 @@ import { createRoot } from "react-dom/client";
 import "./index.css";
 import App from "./App.jsx";
 import React from "react";
+import { Provider } from "react-redux";
+import store from "./redux/store.js";
 import { BrowserRouter } from "react-router-dom";
-
+import { PersistGate } from "redux-persist/integration/react";
+import { persistor } from "./redux/store.js";
+import { SearchProvider } from "./context/SearchContext.jsx";
+import { AuthProvider } from "./context/AuthContext.jsx";
 createRoot(document.getElementById("root")).render(
-  <StrictMode>
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
-  </StrictMode>
+  <Provider store={store}>
+    <PersistGate persistor={persistor} loading={null}>
+      <AuthProvider>
+        <SearchProvider>
+          <BrowserRouter>
+            <App />
+          </BrowserRouter>
+        </SearchProvider>
+      </AuthProvider>
+    </PersistGate>
+  </Provider>
 );
