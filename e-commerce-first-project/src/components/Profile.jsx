@@ -18,7 +18,7 @@ const Profile = () => {
 
       <div className="space-y-3">
         <div className="p-3 border rounded">
-          <strong>Name:</strong> {user.name}
+          <strong>Name:</strong> {user.username}
         </div>
 
         <div className="p-3 border rounded">
