@@ -1,17 +1,23 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useState} from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useAuth } from "../context/AuthContext.jsx";
-import { useNavigate } from "react-router-dom";
 import { useSearch } from "../context/SearchContext.jsx";
 
-const NavBar = () => {
+// lucide-react icons
+import { Menu, X, ShoppingCart, User, Moon, Sun, Search } from "lucide-react";
+
+const Navbar = () => {
   const navigate = useNavigate();
   const cart = useSelector((state) => state.cart);
   const { user, logout } = useAuth();
-  const quantity = cart.reduce((acc, item) => acc + item.quantity, 0);
   const { search, setSearch } = useSearch();
+
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  const quantity = cart.reduce((acc, item) => acc + item.quantity, 0);
+
 
   const handleLogout = () => {
     logout();
@@ -20,125 +26,173 @@ const NavBar = () => {
   };
 
   return (
-    <nav className="bg-blue-300 shadow-md p-4 flex justify-between items-center sticky top-0 z-50">
-      <div className="flex items-center space-x-8">
-        <Link to="/home" className="text-3xl font-bold text-gray-800">
-          HyperMarket
-        </Link>
-        <div className="hidden md:block">
-          <Link to="/home" className="text-gray-600 hover:text-gray-800">
-            Home
-          </Link>
-        </div>
-      </div>
+    <nav className="bg-white/70 dark:bg-gray-900/60 backdrop-blur-xl shadow-md sticky top-0 z-50 border-b border-gray-200 dark:border-gray-700 transition-all">
+      
+      <div className="max-w-7xl mx-auto px-4 lg:px-8">
 
-      <div className="flex-1 max-w-lg mx-4">
-        <div className="relative">
-          <input
-            onChange={(e) => setSearch(e.target.value)}
-            value={search}
-            type="text"
-            placeholder="Search for products, brands and more"
-            className="w-full px-4 py-2 text-gray-700 bg-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-          <button className="absolute right-0 top-0 mt-2 mr-2">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={1.5}
-              stroke="currentColor"
-              className="w-6 h-6 text-gray-500"
+        {/* NAVBAR FLEX */}
+        <div className="flex justify-between items-center h-16">
+
+          {/* LEFT SIDE */}
+          <div className="flex items-center gap-4">
+
+            {/* Mobile Menu Button */}
+            <button
+              className="md:hidden text-gray-700 dark:text-gray-200"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"
-              />
-            </svg>
-          </button>
-        </div>
-      </div>
+              {mobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
+            </button>
 
-      <div className="flex items-center space-x-6">
-        <Link to="/cart" className="relative text-gray-600 hover:text-gray-800">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-            fill="currentColor"
-            className="w-7 h-7"
-          >
-            <path d="M2.25 2.25a.75.75 0 000 1.5h1.386c.17 0 .318.114.362.278l2.558 9.592a3.752 3.752 0 00-2.806 3.63c0 .414.336.75.75.75h15.75a.75.75 0 000-1.5H5.378A2.25 2.25 0 017.5 15h11.218a.75.75 0 00.674-.421 60.358 60.358 0 002.46-1.12.75.75 0 00-.429-1.455c-.182.075-.37.14-.559.193l-13.27-3.438A.75.75 0 005.14 6.63l-1.26-4.725A.75.75 0 003.13 1.5H2.25zM16.5 21a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM6.75 21a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z" />
-          </svg>
-          {quantity > 0 && (
-            <span className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full px-2 text-xs">
-              {quantity}
-            </span>
-          )}
-        </Link>
-
-        <div className="relative">
-          <button
-            onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
-            className="text-gray-600 hover:text-gray-800"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={1.5}
-              stroke="currentColor"
-              className="w-7 h-7"
+            {/* LOGO */}
+            <Link 
+              to="/home"
+              className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent"
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"
+              HyperMarket
+            </Link>
+
+            {/* Desktop: Home */}
+            <div className="hidden md:flex ml-6">
+              <Link 
+                to="/home" 
+                className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition"
+              >
+                Home
+              </Link>
+            </div>
+          </div>
+
+          {/* SEARCH BAR (DESKTOP) */}
+          <div className="hidden md:flex flex-1 mx-6">
+            <div className="relative w-full group">
+              <input
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                type="text"
+                placeholder="Search products..."
+                className="w-full bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200 px-4 py-2 rounded-full focus:ring-2 focus:ring-blue-500 outline-none transition"
               />
-            </svg>
-          </button>
-          {isUserMenuOpen && (
-            <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-10">
-              {user && user.username ? (
-                <>
-                  <div className="px-4 py-2 text-sm text-gray-700">
-                    Welcome, {user.username}
-                  </div>
-                  <Link
-                    to="/profile"
-                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                  >
-                    Profile
-                  </Link>
-                  <button
-                    onClick={handleLogout}
-                    className="w-full text-left block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                  >
-                    Logout
-                  </button>
-                </>
-              ) : (
-                <>
-                  <Link
-                    to="/login"
-                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                  >
-                    Login
-                  </Link>
-                  <Link
-                    to="/signup"
-                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                  >
-                    Signup
-                  </Link>
-                </>
+              <Search
+                size={20}
+                className="absolute right-3 top-2.5 text-gray-500 dark:text-gray-300 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition"
+              />
+            </div>
+          </div>
+
+          {/* RIGHT SIDE */}
+          <div className="flex items-center gap-6">
+
+
+            {/* CART ICON */}
+            <Link to="/checkout" className="relative group">
+              <ShoppingCart 
+                className="text-gray-700 dark:text-gray-200 group-hover:text-blue-600 transition"
+                size={26} 
+              />
+
+              {quantity > 0 && (
+                <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs px-2 py-0.5 rounded-full animate-bounce">
+                  {quantity}
+                </span>
+              )}
+            </Link>
+
+            {/* USER MENU */}
+            <div className="relative">
+              <button
+                onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
+                className="rounded-full overflow-hidden border border-gray-300 dark:border-gray-600 shadow hover:shadow-lg transition"
+              >
+                {/* Avatar image or fallback icon */}
+                {user?.username ? (
+                  <img 
+                    src={`https://ui-avatars.com/api/?name=${user.username}&background=0D8ABC&color=fff`}
+                    alt="avatar"
+                    className="w-9 h-9 rounded-full"
+                  />
+                ) : (
+                  <User className="w-8 h-8 text-gray-700 dark:text-gray-200 p-1" />
+                )}
+              </button>
+
+              {/* Dropdown */}
+              {isUserMenuOpen && (
+                <div className="absolute right-0 mt-3 w-48 bg-white dark:bg-gray-800 shadow-lg border border-gray-200 dark:border-gray-700 rounded-lg py-2 animate-fade">
+                  {user ? (
+                    <>
+                      <div className="px-4 py-2 text-gray-700 dark:text-gray-300 font-medium">
+                        Hello, {user.username}
+                      </div>
+
+                      <Link
+                        to="/profile"
+                        className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300"
+                        onClick={() => setIsUserMenuOpen(false)}
+                      >
+                        Profile
+                      </Link>
+
+                      <button
+                        onClick={handleLogout}
+                        className="block w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300"
+                      >
+                        Logout
+                      </button>
+                    </>
+                  ) : (
+                    <>
+                      <Link
+                        to="/login"
+                        className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300"
+                      >
+                        Login
+                      </Link>
+                      <Link
+                        to="/signup"
+                        className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300"
+                      >
+                        Signup
+                      </Link>
+                    </>
+                  )}
+                </div>
               )}
             </div>
-          )}
+          </div>
+
         </div>
+
+        {/* MOBILE MENU */}
+        {mobileMenuOpen && (
+          <div className="md:hidden pb-4 space-y-3 animate-slide-down">
+
+            {/* Mobile Search */}
+            <div className="relative">
+              <input
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                type="text"
+                placeholder="Search..."
+                className="w-full bg-gray-100 dark:bg-gray-800 px-4 py-2 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+              />
+              <Search size={20} className="absolute right-3 top-2.5 text-gray-600 dark:text-gray-300" />
+            </div>
+
+            <Link
+              to="/home"
+              className="block px-2 py-1 text-gray-800 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400"
+            >
+              Home
+            </Link>
+
+          </div>
+        )}
+
       </div>
+
     </nav>
   );
 };
 
-export default NavBar;
+export default Navbar;

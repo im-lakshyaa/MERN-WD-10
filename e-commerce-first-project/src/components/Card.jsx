@@ -1,93 +1,111 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  addToCart,
-  increaseQuantity,
-  decreaseQuantity,
-} from "../redux/cartSlice";
+import { addToCart, increaseQuantity, decreaseQuantity } from "../redux/cartSlice";
+import { Star, ShoppingCart, Minus, Plus } from "lucide-react";
+
 const Card = ({ productObj }) => {
   const dispatch = useDispatch();
+
   const productInCart = useSelector((state) =>
     state.cart.find((item) => item.id === productObj.id)
   );
+
   const quantity = productInCart?.quantity || 0;
+
   const discountedPrice = (
     productObj.price -
     (productObj.price * productObj.discountPercentage) / 100
   ).toFixed(2);
 
   const renderStars = (rating) => {
-    const stars = [];
-    for (let i = 1; i <= 5; i++) {
-      stars.push(
-        <svg
-          key={i}
-          className={`w-5 h-5 ${
-            i <= Math.round(rating) ? "text-yellow-400" : "text-gray-300"
-          }`}
-          fill="currentColor"
-          viewBox="0 0 20 20"
-        >
-          <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z" />
-        </svg>
-      );
-    }
-    return stars;
+    return Array.from({ length: 5 }).map((_, index) => (
+      <Star
+        key={index}
+        size={18}
+        className={
+          index < Math.round(rating)
+            ? "text-yellow-400 fill-yellow-400"
+            : "text-gray-300 dark:text-gray-600"
+        }
+      />
+    ));
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-md overflow-hidden w-72 group transform transition-transform duration-300 hover:-translate-y-2">
-      <figure className="relative w-full h-48 overflow-hidden">
+    <div className="
+      bg-white dark:bg-gray-800 rounded-xl shadow-md hover:shadow-2xl 
+      transition-all duration-300 overflow-hidden w-72 cursor-pointer
+      group border border-gray-100 dark:border-gray-700
+    ">
+      {/* 🖼 Product Image */}
+      <figure className="relative h-48 overflow-hidden">
         <img
           className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
           src={productObj.thumbnail}
           alt={productObj.title}
         />
-        <div className="absolute top-2 right-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full">
+
+        {/* Discount Badge */}
+        <div className="absolute top-2 left-2 bg-red-600 text-white text-xs px-3 py-1 rounded-full shadow">
           {productObj.discountPercentage.toFixed(0)}% OFF
         </div>
       </figure>
-      <div className="p-4 flex flex-col grow">
-        <h2
-          className="text-lg font-semibold text-gray-800 truncate"
-          title={productObj.title}
-        >
+
+      {/* Content */}
+      <div className="p-4 flex flex-col h-full dark:text-gray-200">
+        {/* Title */}
+        <h2 className="text-lg font-semibold text-gray-800 dark:text-gray-100 truncate">
           {productObj.title}
         </h2>
-        <div className="flex items-center mt-2">
-          <div className="flex">{renderStars(productObj.rating)}</div>
-          <span className="ml-2 text-sm text-gray-600">
+
+        {/* Rating */}
+        <div className="flex items-center mt-2 gap-1">
+          {renderStars(productObj.rating)}
+          <span className="text-sm text-gray-600 dark:text-gray-300">
             ({productObj.rating.toFixed(1)})
           </span>
         </div>
-        <div className="mt-2 flex items-baseline">
-          <p className="text-xl font-bold text-gray-900">${discountedPrice}</p>
-          <p className="ml-2 text-sm text-gray-500 line-through">
+
+        {/* Price */}
+        <div className="mt-3 flex items-baseline gap-2">
+          <p className="text-xl font-bold text-green-600 dark:text-green-400">
+            ${discountedPrice}
+          </p>
+          <p className="line-through text-gray-500 dark:text-gray-400 text-sm">
             ${productObj.price.toFixed(2)}
           </p>
         </div>
-        <div className="mt-4 grow flex items-end">
+
+        {/* Cart Controls */}
+        <div className="mt-4 flex-grow flex items-end">
           {productInCart ? (
-            <div className="w-full flex items-center justify-between">
+            <div className="flex justify-between items-center w-full bg-gray-100 dark:bg-gray-700 p-2 rounded-lg">
               <button
                 onClick={() => dispatch(decreaseQuantity(productObj))}
-                className="px-3 py-1 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300"
+                className="p-2 bg-red-500 hover:bg-red-600 text-white rounded-md transition"
               >
-                -
+                <Minus size={18} />
               </button>
-              <span className="text-lg font-semibold">{quantity}</span>
+
+              <span className="text-lg font-semibold dark:text-white">{quantity}</span>
+
               <button
                 onClick={() => dispatch(increaseQuantity(productObj))}
-                className="px-3 py-1 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300"
+                className="p-2 bg-green-500 hover:bg-green-600 text-white rounded-md transition"
               >
-                +
+                <Plus size={18} />
               </button>
             </div>
           ) : (
             <button
               onClick={() => dispatch(addToCart(productObj))}
-              className="w-full bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-bold transition-colors duration-300"
+              className="
+                w-full flex justify-center items-center gap-2 
+                bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg 
+                font-semibold transition-all duration-300
+              "
             >
+              <ShoppingCart size={20} />
               Add to Cart
             </button>
           )}

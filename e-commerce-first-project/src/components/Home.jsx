@@ -8,43 +8,65 @@ const Home = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  
+  // Fetch products
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const res = await axios.get("https://dummyjson.com/products");
+        const res = await axios.get("https://dummyjson.com/products?limit=500");
         setProducts(res.data.products); 
-        setLoading(false);
       } catch (error) {
         console.error("Error fetching products:", error);
-        setLoading(false);
       }
+      setLoading(false);
     };
-
     fetchProducts();
   }, []);
-
 
   const filteredProducts = products.filter((product) =>
     product.title.toLowerCase().includes(search.toLowerCase())
   );
 
   return (
-    <div className="p-4 lg:p-8">
+    <div className="p-4 lg:p-8 min-h-screen bg-gray-50 dark:bg-gray-900 transition-all">
+
+      {/* 🔥 Animated page heading */}
+      <h1 className="text-3xl font-bold text-gray-800 dark:text-white mb-6 text-center tracking-wide">
+        Explore Products
+      </h1>
+
+      {/* Loading Skeleton Shimmer */}
       {loading ? (
-        <p className="text-center text-lg text-gray-600">Loading products...</p>
-      ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 justify-items-center">
-          {filteredProducts.length > 0 ? (
-            filteredProducts.map((product) => (
-              <Card key={product.id} productObj={product} />
-            ))
-          ) : (
-            <p className="text-gray-600 text-lg col-span-full text-center">
-              No products found for "{search}"
-            </p>
-          )}
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
+          {Array.from({ length: 10 }).map((_, idx) => (
+            <div
+              key={idx}
+              className="animate-pulse bg-gray-200 dark:bg-gray-700 h-64 w-full rounded-xl"
+            ></div>
+          ))}
         </div>
+      ) : (
+        <>
+          {/* No Products Found */}
+          {filteredProducts.length === 0 ? (
+            <p className="text-gray-600 dark:text-gray-300 text-xl text-center mt-10">
+              No products found for <span className="font-semibold">"{search}"</span>
+            </p>
+          ) : (
+            <div
+              className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 
+                gap-6 justify-items-center animation-fade"
+            >
+              {filteredProducts.map((product) => (
+                <div
+                  key={product.id}
+                  className="w-full transition-transform hover:scale-105 duration-200"
+                >
+                  <Card productObj={product} />
+                </div>
+              ))}
+            </div>
+          )}
+        </>
       )}
     </div>
   );
