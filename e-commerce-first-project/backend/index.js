@@ -3,10 +3,12 @@ import dotenv from "dotenv";
 import mongoose from "mongoose";
 import AuthController from "../backend/authController.js";
 import express from "express";
+import OrderController from "./ordercontroller.js";
 dotenv.config();
 const PORT = 3000;
 
 const app = express();
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cors({
   origin: "*",
@@ -26,7 +28,7 @@ app.get("/",  (req, res) => {
 })
 
 app.use("/api/auth",AuthController)
-
+app.use("/api/order", OrderController);
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);

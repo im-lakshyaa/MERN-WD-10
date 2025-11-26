@@ -13,8 +13,8 @@ console.log(nodemailer);
 const transpoter=nodemailer.createTransport({
     service:"gmail",
     auth:{
-        user:"lakshya2004182024@gmail.com",
-        pass:"ecvr qiom dufr trlk",
+        user:process.env.ESMTP_USER,
+        pass:process.env.ESMTP_PASS,
     },
 });
 
