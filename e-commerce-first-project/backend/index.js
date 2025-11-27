@@ -11,9 +11,9 @@ const app = express();
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cors({
-  origin: ["http://localhost:5173",
-    /\.vercel\.app$/,
-    /\.onrender\.com$/
+  origin: ["https://mern-wd-10-ikw4kd2zo-im-lakshyaas-projects.vercel.app",
+    "https://mern-wd-10.vercel.app",
+    "http://localhost:5173"
   ],
   methods: ["GET", "POST", "PUT", "DELETE"],
   allowedHeaders: ["Content-Type", "Authorization"]
